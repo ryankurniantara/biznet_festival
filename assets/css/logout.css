@@ -1,0 +1,93 @@
+/* ============================
+   LOGOUT COMPONENT
+   ============================ */
+.logout {
+  width: auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: clamp(16px, 4vw, 32px);
+  background-color: #291f6c;
+}
+
+.logout__card {
+  width: min(380px, 92vw);
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: clamp(18px, 3.5vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px; /* jarak rapat seperti contoh */
+  animation: lgFade 0.45s ease both;
+}
+
+.logout__brand {
+  width: 140px;
+  height: auto;
+  display: block;
+}
+
+.logout__img {
+  width: min(220px, 72%);
+  height: auto;
+  display: block;
+  margin-block: 6px 2px;
+}
+
+.logout__title {
+  margin: 6px 0 2px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+}
+
+.logout__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 8px 22px rgba(31, 92, 204, 0.18);
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 6px;
+}
+
+.logout__btn:hover {
+  background: var(--brand-2);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(31, 92, 204, 0.22);
+}
+
+/* Animasi halus */
+@keyframes lgFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsif kecil */
+@media (max-width: 560px) {
+  .logout__card {
+    gap: 12px;
+  }
+  .logout__title {
+    font-size: 1rem;
+  }
+  .logout__btn {
+    width: 100%;
+  }
+}

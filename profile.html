@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festival Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/profile.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <div id="header" class="header"></div>
+
+    <br />
+    <br />
+    <div class="main">
+      <!-- Profile Section -->
+      <div class="page-profile">
+        <div class="profile-wrap">
+          <article class="profile-card">
+            <header class="profile-card__header">
+              <div class="avatar">
+                <!-- avatar icon (SVG) -->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle
+                    cx="12"
+                    cy="8"
+                    r="4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <path
+                    d="M4 20a8 8 0 0 1 16 0"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                </svg>
+              </div>
+
+              <div class="profile-card__title">
+                <h2 id="username">Gerry Putra</h2>
+              </div>
+
+              <button
+                class="edit-btn"
+                aria-label="Edit data"
+                onclick="location.href='edit-profile.html'"
+              >
+                <!-- pencil icon -->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM21.41 6.34c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </header>
+
+            <div class="profile-card__details">
+              <div class="col">
+                <div class="row">
+                  <span class="label">Jenis Pelanggan</span>
+                  <span class="value" id="customer-type">Umum</span>
+                </div>
+                <div class="row">
+                  <span class="label">Alamat Email</span>
+                  <span class="value" id="email">Email</span>
+                </div>
+                <div class="row">
+                  <span class="label">Alamat Lengkap</span>
+                  <span class="value" id="address"> Address </span>
+                </div>
+                <div class="row">
+                  <span class="label">Jenis Kelamin</span>
+                  <span class="value" id="gender">Laki-laki</span>
+                </div>
+
+                <div class="row">
+                  <span class="label">Provinsi</span>
+                  <span class="value" id="province">Bali</span>
+                </div>
+                <div class="row">
+                  <span class="label">Kelurahan</span>
+                  <span class="value" id="subdistrict">Benoa</span>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="row">
+                  <span class="label">No Identitas KTP</span>
+                  <span class="value" id="id-card">Id Card</span>
+                </div>
+                <div class="row">
+                  <span class="label">Tanggal Lahir</span>
+                  <span class="value" id="birth-date">Date Of Birth</span>
+                </div>
+                <div class="row">
+                  <span class="label">Kecamatan</span>
+                  <span class="value" id="district">District</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+
+    <!-- Footer -->
+    <div id="footer" class="footer"></div>
+
+    <!-- Script -->
+    <script type="module" src="assets/js/auth.js"></script>
+    <script src="assets/js/components/header.js"></script>
+    <script type="module" src="assets/js/profile.js"></script>
+    <script type="module" src="assets/js/components/footer.js"></script>
+
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Helper alert -->
+    <script src="assets/js/components/alerts.js"></script>
+
+    <div id="loader-overlay" class="loader-overlay" hidden>
+      <div class="loader"></div>
+    </div>
+  </body>
+</html>

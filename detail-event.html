@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festival Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/detail-event.css" />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <div class="header" id="header"></div>
+
+    <!-- DETAIL EVENT -->
+    <main class="page-detail-event">
+      <div class="container">
+        <div class="grid">
+          <!-- Kolom Kiri -->
+          <div class="left">
+            <h2 class="section-title">Detail Event</h2>
+            <h1 class="main-title" id="event-title">Event Tittle</h1>
+            <p class="para" id="event-description">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+
+            <!-- ganti class hero -> hero-img agar tidak bentrok -->
+            <img
+              class="hero-img"
+              src="assets/img/hero.jpg"
+              alt="Banner / foto event"
+              id="event-image"
+            />
+            <!-- Grid image kecil slider -->
+            <!-- <div class="grid-image">
+              <img
+                src="assets/img/hero.jpg"
+                alt="Banner / foto event"
+                class="img-small" 
+              />
+              <img
+                src="assets/img/hero.jpg"
+                alt="Banner / foto event"
+                class="img-small"
+              />
+              <img
+                src="assets/img/hero.jpg"
+                alt="Banner / foto event"
+                class="img-small"
+              />
+              <img
+                src="assets/img/hero.jpg"
+                alt="Banner / foto event"
+                class="img-small"
+              /> -->
+
+            <br />
+            <h3 class="section-title">Detail Kompetisi Lomba</h3>
+            <ul class="accordion">
+              <li>
+                <div class="accordion-header">
+                  <span class="ico"></span>
+                  <span>Lomba Mewarnai</span>
+                  <span class="arrow"
+                    ><i class="fas fa-chevron-right"></i
+                  ></span>
+                </div>
+                <div class="accordion-content">
+                  Peserta akan diberikan gambar untuk diwarnai. Penilaian
+                  berdasarkan kreativitas warna dan kerapihan.
+                </div>
+              </li>
+              <li>
+                <div class="accordion-header">
+                  <span class="ico"></span>
+                  <span>Lomba Mural</span>
+                  <span class="arrow"
+                    ><i class="fas fa-chevron-right"></i
+                  ></span>
+                </div>
+                <div class="accordion-content">
+                  Tim akan membuat mural di area yang disediakan. Penilaian dari
+                  kreativitas, tema, dan estetika.
+                </div>
+              </li>
+              <li>
+                <div class="accordion-header">
+                  <span class="ico"></span>
+                  <span>Lomba Mancing</span>
+                  <span class="arrow"
+                    ><i class="fas fa-chevron-right"></i
+                  ></span>
+                </div>
+                <div class="accordion-content">
+                  Peserta diberi waktu tertentu. Pemenang ditentukan dari jumlah
+                  & berat ikan terbanyak.
+                </div>
+              </li>
+            </ul>
+            <ul class="accordion">
+              <li>
+                <div class="accordion-header">
+                  <span class="ico"></span>
+                  <span>Lomba Mewarnai</span>
+                  <span class="arrow"
+                    ><i class="fas fa-chevron-right"></i
+                  ></span>
+                </div>
+                <div class="accordion-content">
+                  Peserta akan diberikan gambar untuk diwarnai. Penilaian
+                  berdasarkan kreativitas warna dan kerapihan.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Kolom Kanan -->
+          <aside class="right">
+            <div class="side-block">
+              <h3 class="side-title">Detail Lokasi Acara</h3>
+              <ul class="detail-list">
+                <li>
+                  <span class="dot"></span>
+                  <span id="event-location">Lokasi Acara</span>
+                </li>
+                <li>
+                  <span class="dot"></span>
+                  <span id="event-date">Tanggal Acara</span>
+                </li>
+                <li>
+                  <span class="dot"></span>
+                  <span id="event-time">Waktu Acara</span>
+                </li>
+              </ul>
+            </div>
+            <div class="button-register">Daftar Sekarang</div>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <div id="loader-overlay" class="loader-overlay" hidden>
+      <div class="loader"></div>
+    </div>
+    <!-- Footer -->
+    <div class="footer" id="footer"></div>
+    <!-- Script -->
+    <script type="module" src="assets/js/auth.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script type="module" src="assets/js/detail-event.js"></script>
+    <script src="assets/js/components/header.js"></script>
+    <script type="module" src="assets/js/components/footer.js"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Helper alert -->
+    <script src="assets/js/components/alerts.js"></script>
+  </body>
+</html>

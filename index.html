@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festival Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/event.css" />
+  </head>
+
+    <!-- Header -->
+    <div id="header" class="header"></div>
+
+    <div class="main">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-content">
+          <h1>Welcome, <span id="username">Guest</span></h1>
+          <button class="btn-profile">Lihat Profil</button>
+        </div>
+      </section>
+
+      <!-- Upcoming Events -->
+      <section class="event-section">
+        <h2>LIST EVENT</h2>
+        <div id="event-list" class="event-list"></div>
+      </section>
+
+      <br />
+      <br />
+    </div>
+ 
+
+    <!-- Footer -->
+    <div  id="footer" class="footer"></div>
+
+    <!-- Script -->
+    <script src="assets/js/auth.js"></script> 
+    <script src="assets/js/components/header.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+    <script src="assets/js/components/footer.js"></script>
+
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Helper alert -->
+    <script src="assets/js/components/alerts.js"></script>
+     <div id="loader-overlay" class="loader-overlay" hidden>
+      <div class="loader"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+/* === Profile Page Scoped Variables === */
+.page-profile {
+  --brand: #1f5ccc;
+  --ink: #0f172a;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --avatar-bg: #e9f0ff;
+  color: var(--ink);
+}
+
+/* container */
+.page-profile .profile-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+  padding: 24px;
+}
+
+.page-profile .profile-wrap {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+/* ===== Header: avatar - title - edit button ===== */
+.page-profile .profile-card__header {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 20px;
+  align-items: center;
+}
+
+.page-profile .avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 26px;
+  background: var(--avatar-bg);
+  color: #2055b4;
+  display: grid;
+  place-items: center;
+}
+.page-profile .avatar svg {
+  width: 68%;
+  height: 68%;
+}
+
+.page-profile .profile-card__title h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.page-profile .edit-btn {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.page-profile .edit-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ===== Details ===== */
+.page-profile .profile-card__details {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 columns */
+  gap: 24px 48px;
+}
+
+.page-profile .col .row {
+  display: grid;
+  grid-template-columns: 180px 1fr; /* label | value */
+  gap: 10px;
+  align-items: start;
+  padding: 6px 0;
+}
+
+.page-profile .label {
+  font-weight: 700;
+}
+
+.page-profile .value {
+  color: #111827;
+  word-break: break-word; /* prevent breaking KTP number */
+}
+
+/* ===== Responsive (mobile ≤760px) ===== */
+@media (max-width: 760px) {
+  .page-profile .profile-card {
+    padding: 18px;
+  }
+
+  .page-profile .profile-card__header {
+    grid-template-columns: 72px 1fr auto;
+    gap: 14px;
+  }
+
+  .page-profile .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+  }
+
+  .page-profile .profile-card__title h2 {
+    font-size: 22px;
+  }
+
+  .page-profile .profile-card__details {
+    grid-template-columns: 1fr; /* stack */
+    gap: 12px;
+  }
+
+  .page-profile .col .row {
+    grid-template-columns: 140px 1fr;
+    gap: 8px;
+  }
+}

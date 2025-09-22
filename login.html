@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festival Dashboard - Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/login.css" />
+  </head>
+
+  <body>
+    <section class="auth">
+      <div class="auth__card">
+        <img
+          class="auth__logo"
+          src="assets/img/logo-bfest.png"
+          alt="Bizznet Festival Logo"
+        />
+        <p class="auth__subtitle">
+          Akses dashboard festival kamu dengan email terdaftar.
+        </p>
+
+        <form id="loginForm" method="POST" novalidate>
+          <div class="auth__group">
+            <label class="auth__label" for="email">
+              <i class="fa-solid fa-envelope"></i> Email
+            </label>
+            <input
+              class="auth__input"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="nama@contoh.com"
+              required
+            />
+          </div>
+
+          <button type="submit" class="auth__btn">Masuk</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- jQuery + jQuery Validate -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Script login -->
+    <script type="module" src="assets/js/login.js"></script>
+  </body>
+</html>

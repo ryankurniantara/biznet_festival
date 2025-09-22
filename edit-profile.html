@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Data Diri</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/edit-profile.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <div id="header" class="header"></div>
+
+    <div class="main">
+      <form id="editForm" novalidate>
+        <div class="page-edit-profile">
+          <main class="form-page">
+            <h1 class="page-title">Edit Data&nbsp;Diri</h1>
+
+            <!-- INFORMASI DIRI -->
+            <section class="card" aria-labelledby="info-diri">
+              <h2 id="info-diri" class="section-title">INFORMASI DIRI</h2>
+              <p class="section-desc">
+                Kolom yang ditandai bintang ( * ) harus diisi.
+              </p>
+
+              <div class="seg">
+                <input type="radio" name="jenis" id="seg-general" checked />
+                <label for="seg-general">Umum</label>
+
+                <input type="radio" name="jenis" id="seg-customer" />
+                <label for="seg-customer">Pelanggan</label>
+              </div>
+
+              <br />
+
+              <div class="grid">
+                <div class="field full" id="field-custnum">
+                  <label class="label required" for="customerNumber"
+                    >No Pelanggan
+                  </label>
+
+                  <input
+                    class="input"
+                    type="text"
+                    id="customerNumber"
+                    name="customerNumber"
+                    placeholder="Enter customer number..."
+                  />
+                  <p class="hint">
+                    Silakan masukkan nomor Account Number ex:55010XXXXX
+                  </p>
+                </div>
+
+                <div class="field full">
+                  <label class="label required" for="name">Nama</label>
+                  <input
+                    class="input"
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Nama lengkap"
+                  />
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="gender"
+                    >Jenis Kelamin</label
+                  >
+                  <select class="select" id="gender" name="gender">
+                    <option value="" selected>Pilih</option>
+                    <option>Laki - Laki</option>
+                    <option>Perempuan</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="dob">Tanggal Lahir</label>
+                  <input
+                    class="input"
+                    id="dob"
+                    name="dob"
+                    type="date"
+                    placeholder="dd/mm/yyyy"
+                  />
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="email">Email</label>
+                  <input
+                    class="input"
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="nama@email.com"
+                  />
+                  <p class="hint">
+                    Pastikan alamat email kamu sudah benar, agar dapat menerima
+                    kode dan notifikasi melalui email.
+                  </p>
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="phone">No. Telepon</label>
+                  <div class="input-group">
+                    <span class="prefix">+62</span>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="81234567890"
+                      inputmode="numeric"
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <br />
+
+            <!-- INFORMASI LAIN -->
+            <section class="card" aria-labelledby="info-lain">
+              <h2 id="info-lain" class="section-title">INFORMASI LAIN</h2>
+              <p class="section-desc">
+                Tempat tinggal kamu (Provinsi – Kota – Kecamatan – Kelurahan)
+              </p>
+
+              <div class="grid">
+                <div class="field full">
+                  <label class="label required" for="address">Alamat</label>
+                  <input
+                    class="input"
+                    id="address"
+                    name="address"
+                    type="text"
+                    placeholder="Nama jalan, nomor rumah, RT/RW"
+                  />
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="province">Provinsi</label>
+                  <select class="select" id="province" name="province">
+                    <option value="" selected>Pilih Provinsi</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="city">Kota</label>
+                  <select class="select" id="city" name="city">
+                    <option value="" selected>Pilih Kota</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="district">Kecamatan</label>
+                  <select class="select" id="district" name="district">
+                    <option value="" selected>Pilih Kecamatan</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="sub_district"
+                    >Kelurahan</label
+                  >
+                  <select class="select" id="sub_district" name="sub_district">
+                    <option value="" selected>Pilih Kelurahan</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="id_card">Jenis Identitas</label>
+                  <select class="select" id="id_card" name="id_card">
+                    <option value="" selected>Pilih</option>
+                    <option>KTP (Kartu Tanda Penduduk)</option>
+                    <option>SIM (Surat Izin Mengemudi)</option>
+                    <option>Kartu Pelajar</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="id_number">Nomor Identitas</label>
+                  <input
+                    class="input"
+                    id="id_number"
+                    name="id_number"
+                    type="text"
+                    placeholder="Nomor sesuai identitas"
+                  />
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" type="submit">SUBMIT</button>
+              </div>
+            </section>
+          </main>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer" class="footer"></div>
+
+    <!-- jQuery + jQuery Validation (taruh di atas script lain yang pakai) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Script -->
+    <script type="module" src="assets/js/auth.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script type="module" src="assets/js/edit-profile.js"></script>
+    <script src="assets/js/components/header.js"></script>
+    <script type="module" src="assets/js/components/footer.js"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Helper alert -->
+    <script src="assets/js/components/alerts.js"></script>
+  </body>
+</html>
