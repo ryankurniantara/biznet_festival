@@ -4,64 +4,37 @@ import {
   getCities,
   getDistricts,
   getSubDistricts,
-  updateProfile,
+  postProfile,
 } from "./api/edit-profile-api.js";
-
+import { getProfile } from "./api/home-api.js";
 import { API_CONFIG } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  async function postData(data = {}) {
-    try {
-      const res = await updateProfile(data);
-
-      if (res.status === true) {
-        if (window.Swal) {
-          Swal.fire({
-            icon: "success",
-            title: "Berhasil!",
-            text: res.message || "Data berhasil disimpan.",
-          });
-          // Redirect to profile page after success
-          window.location.href = "profile.html";
-        } else {
-          alert("Data berhasil disimpan.");
-        }
-      }
-    } catch (error) {
-      console.error("Error saving profile data:", error);
-      if (window.Swal) {
-        Swal.fire({
-          icon: "error",
-          title: "Gagal!",
-          text: error.message || "Data gagal disimpan.",
-        });
-      } else {
-        alert("Data gagal disimpan.");
-      }
-    }
-  }
-
-  // Filling Form Data
-
+  // ==========================
+  // Helpers dasar
+  // ==========================
+  const $ = window.jQuery;
   const provinceSelect = document.getElementById("province");
   const citySelect = document.getElementById("city");
   const districtSelect = document.getElementById("district");
   const subDistrictSelect = document.getElementById("sub_district");
 
-  // Helpers
   const resetSelect = (sel, placeholder) => {
     sel.innerHTML = `<option value="">${placeholder}</option>`;
     sel.disabled = true;
   };
   const enable = (sel) => (sel.disabled = false);
 
-  // Set awal
+  // Set awal: kosongkan anak-anak
   resetSelect(citySelect, "Pilih Kota");
   resetSelect(districtSelect, "Pilih Kecamatan");
   resetSelect(subDistrictSelect, "Pilih Kelurahan");
 
-  // ===== Provinces: load hanya saat klik, bisa retry =====
+  // ==========================
+  // Load Provinces on demand
+  // ==========================
   let isLoadingProvinces = false;
+
   const loadProvinces = async () => {
     if (isLoadingProvinces) return;
     isLoadingProvinces = true;
@@ -98,7 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!state || state === "error") loadProvinces();
   });
 
-  // Province -> City
+  // ==========================
+  // Cascade Province -> City
+  // ==========================
   provinceSelect.addEventListener("change", () => {
     const provinceId = provinceSelect.value;
     resetSelect(citySelect, "Pilih Kota");
@@ -125,7 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  // City -> District
+  // ==========================
+  // Cascade City -> District
+  // ==========================
   citySelect.addEventListener("change", () => {
     const cityId = citySelect.value;
     resetSelect(districtSelect, "Pilih Kecamatan");
@@ -151,7 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  // District -> SubDistrict
+  // ==========================
+  // Cascade District -> Subdistrict
+  // ==========================
   districtSelect.addEventListener("change", () => {
     const districtId = districtSelect.value;
     resetSelect(subDistrictSelect, "Pilih Kelurahan");
@@ -176,22 +155,37 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  // Segmented Options
+  // ==========================
+  // Segmented Options (Umum vs Pelanggan)
+  // ==========================
   const segGeneral = document.getElementById("seg-general");
   const segCustomer = document.getElementById("seg-customer");
   const custnumField = document.getElementById("field-custnum");
-  const updateSeg = () =>
-    (custnumField.style.display = segCustomer.checked ? "block" : "none");
+
+  const updateSeg = () => {
+    const show = segCustomer.checked;
+    custnumField.style.display = show ? "block" : "none";
+    // Ketika pindah ke Umum, kosongkan & validasi ulang nomor pelanggan
+    if (!show) {
+      const $cn = $("#customerNumber");
+      $cn.val("");
+      // trigger validasi agar pending request dibatalkan
+      $cn.valid();
+    }
+  };
   segGeneral.addEventListener("change", updateSeg);
   segCustomer.addEventListener("change", updateSeg);
   updateSeg();
 
-  // Phone Indonesia (tanpa '0' karena ada +62)
+  // ==========================
+  // jQuery Validate — Custom Rules
+  // ==========================
+  // Phone Indonesia (tanpa '0' karena +62)
   $.validator.addMethod(
     "phoneID",
     function (value) {
       if (!value) return false;
-      return /^\d{8,13}$/.test(value); // 81234567890
+      return /^\d{8,13}$/.test(value); // contoh: 81234567890
     },
     "Masukkan nomor telepon yang valid (8–13 digit)."
   );
@@ -212,12 +206,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "Usia minimal {0} tahun."
   );
 
-  // No pelanggan (contoh umum 10–13 digit; sesuaikan jika ada pola khusus)
+  // No pelanggan pola umum 10–13 digit
   $.validator.addMethod(
     "custnumPattern",
     function (value) {
-      if (!value) return false;
-      return /^\d{10,13}$/.test(value);
+      const raw = String(value || "").replace(/\D/g, "");
+      // jika optional (required=false) dan kosong -> lulus
+      if (this.optional(this.currentElements[0]) && raw === "") return true;
+      return /^\d{10,13}$/.test(raw);
     },
     "No Pelanggan tidak valid."
   );
@@ -225,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Nomor identitas mengikuti jenis yg dipilih
   $.validator.addMethod(
     "idNumberByType",
-    function (value) {
+    function (value, element) {
       const type = $("#id_card").val();
       if (!type) return true; // belum pilih → biarkan 'required' yg urus
       const v = (value || "").trim();
@@ -245,11 +241,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-  // Cek nomor pelanggan via AJAX
+  // Cek nomor pelanggan via AJAX (true jika status===true)
   $.validator.addMethod("custnumExistsAjax", function (value, element) {
-    const v = this;
+    // Skip kalau segmen Umum
     if (!$("#seg-customer").is(":checked")) return true;
 
+    const v = this;
     const raw = String(value || "").replace(/\D/g, "");
     if (!/^\d{10,13}$/.test(raw)) return false;
 
@@ -260,12 +257,13 @@ document.addEventListener("DOMContentLoaded", () => {
     v.startRequest(element);
 
     // batalkan request lama
-    if (element._xhr && element._xhr.readyState !== 4)
+    if (element._xhr && element._xhr.readyState !== 4) {
       try {
         element._xhr.abort();
       } catch {}
+    }
 
-    // Tampilkan Swal loading (dengan threshold agar gak kedip)
+    // Swal loading (pakai threshold 250ms agar tidak flicker)
     let swalTimer = setTimeout(() => {
       if (window.Swal && !Swal.isVisible()) {
         Swal.fire({
@@ -292,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
         v.stopRequest(element, true);
       } else {
         prev.valid = false;
-        $(element).val(""); // kosongkan input
+        $(element).val(""); // kosongkan input jika tidak ditemukan
         const errs = {};
         errs[element.name] = msg || "Nomor pelanggan tidak ditemukan";
         v.invalid[element.name] = true;
@@ -306,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
       method: "POST",
       dataType: "json",
       data: { idcust: raw }, // urlencoded → $_POST['idcust']
+      timeout: 10000,
     })
       .done((res) => {
         const ok = res?.status === true;
@@ -323,6 +322,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return "pending";
   });
 
+  // ==========================
+  // jQuery Validate — Setup
+  // ==========================
   const form = $("#editForm");
   form.validate({
     ignore: [],
@@ -330,11 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
       customerNumber: {
         required: {
           depends: function () {
-            if (
-              document.getElementById("seg-customer").checked &&
-              $("#customerNumber").val() !== ""
-            )
-              return true;
+            return document.getElementById("seg-customer").checked;
           },
         },
         digits: true,
@@ -342,36 +340,18 @@ document.addEventListener("DOMContentLoaded", () => {
         maxlength: 13,
         custnumPattern: true,
         custnumExistsAjax: true,
-        onkeyup: false,
       },
-      name: {
-        required: true,
-        minlength: 3,
-      },
-      gender: {
-        required: true,
-      },
-      dob: {
-        required: true,
-        minAge: 13,
-      },
-      email: {
-        required: true,
-        email: true,
-      },
-      phone: {
-        required: true,
-        phoneID: true,
-      },
-      address: {
-        required: true,
-        minlength: 5,
-      },
+      name: { required: true, minlength: 3 },
+      gender: { required: true },
+      dob: { required: true, minAge: 13 },
+      email: { required: true, email: true },
+      phone: { required: true, phoneID: true },
+      address: { required: true, minlength: 5 },
       province: { required: true },
       city: { required: true },
       district: { required: true },
       sub_district: { required: true },
-      id_card: { required: true },
+      id_card: { required: false },
       id_number: {
         required: {
           depends: function () {
@@ -381,7 +361,6 @@ document.addEventListener("DOMContentLoaded", () => {
         idNumberByType: true,
       },
     },
-
     messages: {
       customerNumber: {
         required: "No Pelanggan wajib diisi untuk segmen Pelanggan.",
@@ -403,9 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
         required: "Email wajib diisi.",
         email: "Format email tidak valid.",
       },
-      phone: {
-        required: "No. Telepon wajib diisi.",
-      },
+      phone: { required: "No. Telepon wajib diisi." },
       address: {
         required: "Alamat wajib diisi.",
         minlength: "Alamat terlalu pendek.",
@@ -419,8 +396,6 @@ document.addEventListener("DOMContentLoaded", () => {
         required: "Nomor identitas wajib diisi saat jenis dipilih.",
       },
     },
-
-    // Penempatan error yang rapi (pakai jQuery object)
     errorPlacement: function (error, element) {
       const $el = $(element);
       const $field = $el.closest(".field");
@@ -437,8 +412,6 @@ document.addEventListener("DOMContentLoaded", () => {
         error.insertAfter($el);
       }
     },
-
-    // Tambah/hapus class invalid
     highlight: function (element) {
       $(element).closest(".field").addClass("invalid");
     },
@@ -446,52 +419,169 @@ document.addEventListener("DOMContentLoaded", () => {
       $(element).closest(".field").removeClass("invalid");
     },
 
-    // Submit sukses (semua valid)
+    // === SUBMIT ===
     submitHandler: function (formEl, e) {
-      e.preventDefault();
+      if (e && typeof e.preventDefault === "function") e.preventDefault();
 
       const payload = {
-        jenis: document.getElementById("seg-customer").checked
-          ? "Pelanggan"
-          : "Umum",
-        customerNumber: $("#customerNumber").val() || null,
-        name: $("#name").val(),
-        gender: $("#gender").val(),
-        dob: $("#dob").val(),
-        email: $("#email").val(),
-        phone: $("#phone").val(),
-        address: $("#address").val(),
-        province: $("#province").val(),
-        city: $("#city").val(),
-        district: $("#district").val(),
-        sub_district: $("#sub_district").val(),
-        id_card: $("#id_card").val(),
-        id_number: $("#id_number").val(),
+        name: $("#name").val().trim(),
+        gender: $("#gender").val().trim(), // "L" / "P"
+        birthdate: $("#dob").val().trim(), // yyyy-mm-dd
+        country_code_mobile_no: "+62",
+        mobile_number: $("#phone").val().trim(),
+        address: $("#address").val().trim(),
+        province: $("#province").val().trim(), // id
+        city: $("#city").val().trim(), // id
+        district: $("#district").val().trim(), // id
+        subdistrict: $("#sub_district").val().trim(), // id
+        identity_type: $("#id_card").val().trim(),
+        identity_no: $("#id_number").val().trim(),
+        idcust: document.getElementById("seg-customer").checked
+          ? $("#customerNumber").val().trim()
+          : undefined,
       };
 
-      console.log("Form valid, siap submit:", payload);
-
-      // TODO: kirim ke API kamu di sini
-      // fetch('/api/profile', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
-
-      if (window.Swal) {
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil!",
-          text: "Data berhasil divalidasi dan siap dikirim.",
-        });
-      } else {
-        alert("Data valid. Siap dikirim:\n" + JSON.stringify(payload, null, 2));
-      }
+      console.log("[validate] Form valid → kirim payload:", payload);
+      postData(payload);
+      return false; // stop native submit
     },
   });
 
   // Re-validate saat kondisi berubah
-
   $("#id_card").on("change", function () {
     $("#id_number").valid();
   });
   $("#id_number").on("input blur", function () {
     $(this).valid();
   });
+
+  // ==========================
+  // Submit → API
+  // ==========================
+  async function postData(data = {}) {
+    console.log("[postData] kirim:", data);
+    try {
+      const res = await postProfile(data);
+      console.log("[postData] response:", res);
+
+      if (res?.status === true) {
+        if (window.Swal) {
+          await Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: res.message || "Data berhasil disimpan.",
+          });
+        } else {
+          alert("Data berhasil disimpan.");
+        }
+        window.location.href = "profile.html";
+        return;
+      }
+      throw new Error(res?.message || "Gagal menyimpan data");
+    } catch (error) {
+      console.error("[postData] error:", error);
+      if (window.Swal) {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: error.message || "Data gagal disimpan.",
+        });
+      } else {
+        alert("Data gagal disimpan.");
+      }
+    }
+  }
+
+  // ==========================
+  // Prefill dari API getProfile
+  // ==========================
+  const userData = JSON.parse(localStorage.getItem("visitor_data")) || {};
+
+  async function fillForm(data) {
+    if (!data) return;
+
+    // Segmen
+    if (data.customer_status === "bp") {
+      document.getElementById("seg-customer").checked = true;
+      $("#customerNumber").val(data.idcust || "");
+    } else {
+      document.getElementById("seg-general").checked = true;
+      $("#customerNumber").val("");
+    }
+    updateSeg();
+
+    // Field teks
+    $("#name").val(data.name || "");
+    // data.gender bisa "L"/"P" → set langsung
+    $("#gender").val(data.gender || "");
+    $("#dob").val(data.birthdate || "");
+    $("#email").val(data.email || "");
+    $("#phone").val(data.phone || "");
+    $("#address").val(data.address || "");
+
+    // Pastikan provinsi loaded dulu
+    if (
+      !provinceSelect.dataset.state ||
+      provinceSelect.dataset.state === "error"
+    ) {
+      try {
+        await loadProvinces();
+      } catch {}
+    }
+
+    // Set dropdown pakai ID (fallback ke *_id)
+    const pid = data.province || data.province_id || "";
+    if (pid) {
+      $("#province").val(String(pid)).trigger("change");
+    }
+
+    // Tunggu sedikit agar chain load sempat jalan
+    await new Promise((r) => setTimeout(r, 80));
+
+    const cid = data.city || data.city_id || "";
+    if (cid) {
+      $("#city").val(String(cid)).trigger("change");
+    }
+
+    await new Promise((r) => setTimeout(r, 80));
+
+    const did = data.district || data.district_id || "";
+    if (did) {
+      $("#district").val(String(did)).trigger("change");
+    }
+
+    await new Promise((r) => setTimeout(r, 80));
+
+    const sid = data.subdistrict || data.subdistrict_id || "";
+    if (sid) {
+      $("#sub_district").val(String(sid));
+    }
+
+    // Identitas
+    $("#id_card").val(data.id_card || data.identity_type || "");
+    $("#id_number").val(data.id_number || data.identity_no || "");
+  }
+
+  async function loadProfile() {
+    console.log("Loading profile for:", userData);
+    try {
+      if (userData?.status_visitor) {
+        // Muat provinsi lebih awal untuk meminimalkan tunggu
+        if (!provinceSelect.dataset.state) await loadProvinces();
+        const profileData = await getProfile(userData.email_crypted);
+        console.log("Fetched profile data:", profileData);
+        await fillForm(profileData);
+      } else {
+        // kalau tidak login / tidak ada status, set minimal: aktifkan provinsi agar bisa dipilih manual
+        if (!provinceSelect.dataset.state) await loadProvinces();
+      }
+    } catch (error) {
+      console.error("Error loading profile:", error);
+      // tetap buka provinsi jika gagal getProfile
+      if (!provinceSelect.dataset.state) await loadProvinces();
+    }
+  }
+
+  // GO
+  loadProfile();
 });

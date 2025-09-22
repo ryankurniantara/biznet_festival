@@ -1,7 +1,7 @@
 import { API_CONFIG } from "../config.js";
 import { ApiError, apiFetch } from "../response.js";
 
-export async function updateProfile(params) {
+export async function postProfile(params) {
   const url = `${API_CONFIG.BASE_URL}/post-profile`;
   try {
     const res = await apiFetch(url, {
@@ -9,6 +9,7 @@ export async function updateProfile(params) {
       showAlert: true,
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("visitor_token")}`,
       },
       body: JSON.stringify(params),
     });
