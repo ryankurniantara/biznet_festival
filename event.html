@@ -23,61 +23,14 @@
       <section class="event-section">
         <!-- Upcoming Events -->
         <div class="event-toolbar">
-          <h2>UPCOMING EVENT</h2>
+          <h2>UPCOMING EVENTS</h2>
           <!-- Filter: kalender di kanan -->
           <div class="filters">
-            <button
-              id="btn-date"
-              class="chip-button"
-              aria-haspopup="dialog"
-              aria-expanded="false"
-            >
-              <span class="ico-calendar" aria-hidden="true"></span>
-              <span id="btn-date-label">Semua</span>
-            </button>
-
-            <!-- kalender native, disembunyikan visualnya -->
-            <input
-              id="filter-month"
-              type="month"
-              style="
-                position: absolute;
-                opacity: 0;
-                pointer-events: none;
-                width: 0;
-                height: 0;
-              "
-            />
-
-            <!-- Popover kalender -->
-            <div id="calendar-pop" class="calendar-popover" hidden>
-              <div class="cal-head">
-                <button
-                  class="cal-nav"
-                  data-dir="-1"
-                  aria-label="Bulan sebelumnya"
-                ></button>
-                <div class="cal-title" id="cal-title">—</div>
-                <button
-                  class="cal-nav"
-                  data-dir="1"
-                  aria-label="Bulan berikutnya"
-                ></button>
-              </div>
-
-              <div class="cal-week">
-                <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span
-                ><span>Kam</span><span>Jum</span><span>Sab</span>
-              </div>
-
-              <div class="cal-grid" id="cal-grid"><!-- auto by JS --></div>
-
-              <div class="cal-actions">
-                <button type="button" id="cal-clear" class="cal-link">
-                  Semua
-                </button>
-              </div>
-            </div>
+            <!-- Year Filter -->
+            <select id="year-filter" class="chip-button year-filter">
+              <option value="">Semua Tahun</option>
+              <!-- Options will be populated dynamically from API data -->
+            </select>
           </div>
         </div>
 
@@ -88,7 +41,7 @@
 
         <!-- Upcoming Events -->
         <div class="event-toolbar">
-          <h2>PAST EVENT</h2>
+          <h2>PAST EVENTS</h2>
         </div>
 
         <div id="past-event-list" class="event-list"></div>
@@ -106,10 +59,14 @@
     <script src="assets/js/api/api.js"></script>
     <script src="assets/js/components/header.js"></script>
     <script type="module" src="assets/js/components/footer.js"></script>
-    <script src="assets/js/event.js"></script>
+    <!-- <script type="module" src="assets/js/main.js"></script> -->
+    <script type="module" src="assets/js/event.js"></script>
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Helper alert -->
     <script src="assets/js/components/alerts.js"></script>
+    <div id="loader-overlay" class="loader-overlay" hidden>
+      <div class="loader"></div>
+    </div>
   </body>
 </html>
