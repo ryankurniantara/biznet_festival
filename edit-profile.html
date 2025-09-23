@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Edit Data Diri</title>
+
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -12,6 +13,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/edit-profile.css" />
   </head>
@@ -45,9 +47,8 @@
               <div class="grid">
                 <div class="field full" id="field-custnum">
                   <label class="label required" for="customerNumber"
-                    >No Pelanggan
-                  </label>
-
+                    >No Pelanggan</label
+                  >
                   <input
                     class="input"
                     type="text"
@@ -77,8 +78,8 @@
                   >
                   <select class="select" id="gender" name="gender">
                     <option value="" selected>Pilih</option>
-                    <option>Laki - Laki</option>
-                    <option>Perempuan</option>
+                    <option value="L">Laki - Laki</option>
+                    <option value="P">Perempuan</option>
                   </select>
                 </div>
 
@@ -98,13 +99,13 @@
                   <input
                     class="input"
                     id="email"
+                    disabled
                     name="email"
                     type="email"
                     placeholder="nama@email.com"
                   />
                   <p class="hint">
-                    Pastikan alamat email kamu sudah benar, agar dapat menerima
-                    kode dan notifikasi melalui email.
+                    Pastikan alamat email benar agar menerima kode/notifikasi.
                   </p>
                 </div>
 
@@ -179,9 +180,9 @@
                   <label class="label" for="id_card">Jenis Identitas</label>
                   <select class="select" id="id_card" name="id_card">
                     <option value="" selected>Pilih</option>
-                    <option>KTP (Kartu Tanda Penduduk)</option>
-                    <option>SIM (Surat Izin Mengemudi)</option>
-                    <option>Kartu Pelajar</option>
+                    <option value="ktp">KTP (Kartu Tanda Penduduk)</option>
+                    <option value="sim">SIM (Surat Izin Mengemudi)</option>
+                    <option value="kartu_pelajar">Kartu Pelajar</option>
                   </select>
                 </div>
 
@@ -208,18 +209,23 @@
 
     <!-- Footer -->
     <div id="footer" class="footer"></div>
+    <!-- Loader Overlay -->
+    <div id="loader-overlay" class="loader-overlay" hidden>
+      <div class="loader"></div>
+    </div>
 
-    <!-- jQuery + jQuery Validation (taruh di atas script lain yang pakai) -->
+    <!-- jQuery + jQuery Validation (HARUS di atas edit-profile.js) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <!-- Script -->
-    <script type="module" src="assets/js/auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <!-- App scripts -->
+    <script src="assets/js/auth.js"></script>
     <script type="module" src="assets/js/edit-profile.js"></script>
     <script src="assets/js/components/header.js"></script>
-    <script type="module" src="assets/js/components/footer.js"></script>
-    <!-- SweetAlert2 CDN -->
+    <script src="assets/js/components/footer.js"></script>
+
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Helper alert -->
     <script src="assets/js/components/alerts.js"></script>
   </body>
 </html>

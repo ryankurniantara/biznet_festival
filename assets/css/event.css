@@ -45,6 +45,12 @@
   margin-bottom: 16px;
 }
 
+.event-toolbar .year-filter {
+  margin-left: auto; /* dorong ke kanan */
+  display: flex; /* biar komponen inline rapi */
+  align-items: center;
+}
+
 /* =========================================================
    GRID LIST & CARDS
    ========================================================= */
@@ -168,6 +174,10 @@
     align-items: stretch;
     gap: 10px;
     margin-bottom: 12px;
+  }
+
+  .event-toolbar .year-filter {
+    margin-left: 0;
   }
   .event-section h2 {
     font-weight: 700;

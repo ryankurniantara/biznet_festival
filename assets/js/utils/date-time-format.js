@@ -4,7 +4,6 @@ function pad(n) {
 }
 
 export function parseYMDHMS(str) {
-  console.log("Parsing date string:", str);
   if (!str || typeof str !== "string") return null;
   const [datePart, timePart = "00:00:00"] = str.trim().split(/\s+/);
   const d = datePart?.split("-").map(Number);

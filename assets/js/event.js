@@ -1,4 +1,21 @@
+import { mountYearFilter } from "../js/components/year-filter.js";
+
 document.addEventListener("DOMContentLoaded", () => {
+  const yf = YearFilter.mount("#year-filter", {
+    initialYear: 2025,
+    minYear: 2020,
+    maxYear: 2030,
+    onChange: (year, prev) => {
+      console.log("Year changed:", prev, "→", year);
+      // TODO: loadEvents(year);
+    },
+  });
+
+  // contoh: dengarkan event-nya (opsional)
+  document.querySelector("#year-filter").addEventListener("yearchange", (e) => {
+    console.log("CustomEvent yearchange:", e.detail.year);
+  });
+
   (async function () {
     // Load events
     const events = await API.getEvents();
@@ -23,70 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   })();
 
-  // YEAR-ONLY FILTER
-  (function () {
-    const btn = document.getElementById("btn-date");
-    const label = document.getElementById("btn-date-label");
-    const yearI = document.getElementById("filter-year");
-    const list = document.querySelector(".event-list");
-    if (!btn || !label || !yearI || !list) return;
+  // const yf = YearFilter.mount("#year-filter", {
+  //   initialYear: 2025,
+  //   minYear: 2020,
+  //   maxYear: 2030,
+  //   onChange: (year, prev) => {
+  //     console.log("Year changed:", prev, "→", year);
+  //     // TODO: loadEvents(year);
+  //   },
+  // });
 
-    const cards = Array.from(list.querySelectorAll(".event-card"));
-
-    // fallback parse "1 Oktober 2025" -> YYYY-MM-DD (kalau data-date gak ada)
-    const map = {
-      januari: 1,
-      februari: 2,
-      maret: 3,
-      april: 4,
-      mei: 5,
-      juni: 6,
-      juli: 7,
-      agustus: 8,
-      september: 9,
-      oktober: 10,
-      november: 11,
-      desember: 12,
-    };
-    cards.forEach((card) => {
-      if (card.dataset.date) return;
-      const t = (card.textContent || "").toLowerCase();
-      const m = t.match(/(\d{1,2})\s+([a-z]+)\s+(20\d{2})/i);
-      if (m) {
-        const d = String(m[1]).padStart(2, "0");
-        const mo = String(map[(m[2] || "").toLowerCase()] || 1).padStart(
-          2,
-          "0"
-        );
-        card.dataset.date = `${m[3]}-${mo}-${d}`;
-      }
-    });
-
-    function apply() {
-      const y = (yearI.value || "").toString().slice(0, 4);
-      cards.forEach((c) => {
-        const iso = c.dataset.date || "";
-        c.style.display = !y || iso.slice(0, 4) === y ? "" : "none";
-      });
-      label.textContent = y || "Pilih Tahun";
-    }
-
-    // buka input tahun saat tombol diklik
-    btn.addEventListener("click", () => yearI.focus());
-
-    // jaga agar hanya 4 digit, auto-apply
-    yearI.addEventListener("input", () => {
-      yearI.value = yearI.value.replace(/[^\d]/g, "").slice(0, 4);
-      apply();
-    });
-
-    // reset
-    document.getElementById("btn-clear")?.addEventListener("click", () => {
-      yearI.value = "";
-      apply();
-    });
-
-    // init
-    apply();
-  })();
+  // // contoh: dengarkan event-nya (opsional)
+  // document.querySelector("#year-filter").addEventListener("yearchange", (e) => {
+  //   console.log("CustomEvent yearchange:", e.detail.year);
+  // });
+  yf.setYear(2024);
 });

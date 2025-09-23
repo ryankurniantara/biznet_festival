@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       setText("email", dataProfile.email);
       setText("full-name", dataProfile.name);
       setText("id-card", dataProfile.identityno);
-      setText("birthdate", dataProfile.birthdate);
+      setText("birth-date", dataProfile.birthdate);
       setText("address", dataProfile.address);
       setText("province", dataProfile.province_name);
       setText("city", dataProfile.city_name);

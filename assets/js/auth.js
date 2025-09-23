@@ -26,8 +26,8 @@
     "detail-event.html",
   ];
 
-  // Jika kamu ingin benar-benar memastikan localStorage SEPENUHNYA kosong,
-  // set ini ke true (default false agar tidak mengganggu key lain milik situsmu).
+  // Jika ingin memastikan localStorage SEPENUHNYA kosong,
+  // set true (default false agar tidak mengganggu key lain).
   const STRICT_EMPTY_CHECK = false;
 
   // --- Util kecil ---
@@ -53,8 +53,16 @@
       return null;
     }
   };
-  const setUser = (d) =>
+
+  // setUser: simpan & broadcast "auth:updated"
+  const setUser = (d) => {
     localStorage.setItem(DATA_KEY, JSON.stringify(d || {}));
+    try {
+      window.dispatchEvent(
+        new CustomEvent("auth:updated", { detail: d || {} })
+      );
+    } catch {}
+  };
 
   const clearAll = () => {
     localStorage.removeItem(TOKEN_KEY);
@@ -69,6 +77,16 @@
 
   const normalizeUser = (payload) =>
     (payload && (payload.visitor_data || payload.data || payload.user)) || null;
+
+  // Tandai siap & broadcast "auth:ready"
+  function announceAuthReady() {
+    try {
+      window.__authReady = true;
+      window.dispatchEvent(
+        new CustomEvent("auth:ready", { detail: getUser() })
+      );
+    } catch {}
+  }
 
   // Cek apakah LS kosong sesuai aturan yang diminta
   function isLocalStorageConsideredEmpty() {
@@ -85,14 +103,14 @@
     const code = hasCode();
     if (!code) return;
 
-    // 1) Harus belum ada apapun di LS (sesuai rule) — minimal token/data
+    // 1) Harus belum ada auth key di LS (minimal token/data)
     if (!isLocalStorageConsideredEmpty()) {
       log("Skip store: LS sudah terisi (token/data atau key lain).");
-      cleanParam("code"); // bersihkan query agar tidak mengulang
+      cleanParam("code");
       return;
     }
 
-    // 2) Cegah duplikasi di tab/sesi yang sama (reload cepat dsb.)
+    // 2) Cegah duplikasi di tab/sesi yang sama
     const FLAG_KEY = "auth_store_code_handled";
     const handledCode = sessionStorage.getItem(FLAG_KEY);
     if (handledCode && handledCode === String(code)) {
@@ -101,7 +119,7 @@
       return;
     }
 
-    // Tandai akan diproses (jika gagal nanti boleh di-overwrite lagi)
+    // Tandai akan diproses
     sessionStorage.setItem(FLAG_KEY, String(code));
 
     try {
@@ -113,15 +131,16 @@
       const data = await resp.json();
 
       if (data && data.status) {
-        // OK — simpan token & profile
         if (data.token) setToken(data.token);
         const user = normalizeUser(data);
         if (user) setUser(user);
         log("Authenticated via code (once). Token & profile saved.");
         cleanParam("code");
+
+        // -> Beritahu halaman lain kalau auth siap
+        announceAuthReady();
       } else {
         log("Auth via code failed:", data && data.message);
-        // Hapus flag agar jika user refresh dengan code yang sama, bisa coba lagi
         sessionStorage.removeItem(FLAG_KEY);
         clearAll();
         cleanParam("code");
@@ -129,7 +148,6 @@
       }
     } catch (e) {
       log("Auth via code error:", e);
-      // Hapus flag agar boleh re-try jika user reload
       sessionStorage.removeItem(FLAG_KEY);
       clearAll();
       cleanParam("code");
@@ -149,13 +167,17 @@
           "Content-Type": "application/json",
         },
       });
-
+      console.log("Token check response:", token);
       if (resp.status === 401) return false;
 
       const data = await resp.json();
       if (data && data.authenticated) {
         const user = normalizeUser(data);
         if (user) setUser(user);
+
+        // -> Auth siap (berguna saat masuk tanpa ?code)
+        announceAuthReady();
+
         return true;
       }
       return false;

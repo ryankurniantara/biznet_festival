@@ -81,11 +81,11 @@ function makeFooterHtml(leftHtml) {
       </nav>
       <br/>
       <h3 class="foot-title">MEDIA SOSIAL</h3>
-      <ul class="socials">
-        <li><a class="soc" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f fa-xl"></i></a></li>
-        <li><a class="soc" href="#" aria-label="YouTube"><i class="fa-brands fa-youtube fa-xl"></i></a></li>
-        <li><a class="soc" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram fa-xl"></i></a></li>
-      </ul>
+      <div class="socials">
+        <div><a class="soc" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f fa-xl"></i></a></div>
+        <div><a class="soc" href="#" aria-label="YouTube"><i class="fa-brands fa-youtube fa-xl"></i></a></div>
+        <div><a class="soc" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram fa-xl"></i></a></div>
+      </div>
     </section>
 
     <!-- Kanan -->

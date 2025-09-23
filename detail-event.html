@@ -70,62 +70,7 @@
 
             <br />
             <h3 class="section-title">Detail Kompetisi Lomba</h3>
-            <ul class="accordion">
-              <li>
-                <div class="accordion-header">
-                  <span class="ico"></span>
-                  <span>Lomba Mewarnai</span>
-                  <span class="arrow"
-                    ><i class="fas fa-chevron-right"></i
-                  ></span>
-                </div>
-                <div class="accordion-content">
-                  Peserta akan diberikan gambar untuk diwarnai. Penilaian
-                  berdasarkan kreativitas warna dan kerapihan.
-                </div>
-              </li>
-              <li>
-                <div class="accordion-header">
-                  <span class="ico"></span>
-                  <span>Lomba Mural</span>
-                  <span class="arrow"
-                    ><i class="fas fa-chevron-right"></i
-                  ></span>
-                </div>
-                <div class="accordion-content">
-                  Tim akan membuat mural di area yang disediakan. Penilaian dari
-                  kreativitas, tema, dan estetika.
-                </div>
-              </li>
-              <li>
-                <div class="accordion-header">
-                  <span class="ico"></span>
-                  <span>Lomba Mancing</span>
-                  <span class="arrow"
-                    ><i class="fas fa-chevron-right"></i
-                  ></span>
-                </div>
-                <div class="accordion-content">
-                  Peserta diberi waktu tertentu. Pemenang ditentukan dari jumlah
-                  & berat ikan terbanyak.
-                </div>
-              </li>
-            </ul>
-            <ul class="accordion">
-              <li>
-                <div class="accordion-header">
-                  <span class="ico"></span>
-                  <span>Lomba Mewarnai</span>
-                  <span class="arrow"
-                    ><i class="fas fa-chevron-right"></i
-                  ></span>
-                </div>
-                <div class="accordion-content">
-                  Peserta akan diberikan gambar untuk diwarnai. Penilaian
-                  berdasarkan kreativitas warna dan kerapihan.
-                </div>
-              </li>
-            </ul>
+            <div class="comp-cards" id="event-competitions"></div>
           </div>
 
           <!-- Kolom Kanan -->
@@ -147,7 +92,13 @@
                 </li>
               </ul>
             </div>
-            <div class="button-register">Daftar Sekarang</div>
+            <!-- default: tampilkan tombol Daftar, sembunyikan QR -->
+            <div class="button-register" onclick="registerEvent()">
+              Daftar Sekarang
+            </div>
+            <div class="button-showQrCode" hidden onclick="showQrCode()">
+              Lihat QR Code
+            </div>
           </aside>
         </div>
       </div>
@@ -159,7 +110,7 @@
     <div class="footer" id="footer"></div>
     <!-- Script -->
     <script type="module" src="assets/js/auth.js"></script>
-    <script src="assets/js/api.js"></script>
+
     <script type="module" src="assets/js/detail-event.js"></script>
     <script src="assets/js/components/header.js"></script>
     <script type="module" src="assets/js/components/footer.js"></script>

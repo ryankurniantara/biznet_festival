@@ -19,6 +19,7 @@ export async function getEvents({ page = 1, pageSize = 8, year } = {}) {
     const res = await apiFetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      showAlert: true,
     });
 
     // === sesuai struktur: data:Array, pagination:Object ===
@@ -47,6 +48,7 @@ export async function getProfile(email_crypted) {
     const res = await apiFetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      showAlert: true,
     });
     return res.data;
   } catch (err) {
