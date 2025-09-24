@@ -7,35 +7,32 @@ import {
 import { filterDateTime } from "./utils/date-time-format.js";
 import { getProfile } from "./api/home-api.js";
 
-/* =========================
+document.addEventListener("DOMContentLoaded", () => {
+  /* =========================
    Loader helpers
    ========================= */
-function showLoader() {
-  const el = document.getElementById("loader-overlay");
-  if (!el) return;
-  el.classList.add("is-open");
-  el.hidden = false;
-}
-function hideLoader() {
-  const el = document.getElementById("loader-overlay");
-  if (!el) return;
-  el.classList.remove("is-open");
-  el.hidden = true;
-}
+  function showLoader() {
+    const el = document.getElementById("loader-overlay");
+    if (!el) return;
+    el.classList.add("is-open");
+    el.hidden = false;
+  }
+  function hideLoader() {
+    const el = document.getElementById("loader-overlay");
+    if (!el) return;
+    el.classList.remove("is-open");
+    el.hidden = true;
+  }
 
-/* =========================
+  /* =========================
    State
    ========================= */
-let currentEvent = {}; // simpan detail event yang aktif
-let isRegistering = false; // anti double-submit
-let dataQrCode = null; // cache QR code jika perlu
+  let currentEvent = {}; // simpan detail event yang aktif
+  let isRegistering = false; // anti double-submit
+  let dataQrCode = null; // cache QR code jika perlu
 
-/* =========================
-   Boot
-   ========================= */
-document.addEventListener("DOMContentLoaded", () => {
   // Render Detail Kompetisi
-  function renderDetailKompetisi(raw = []) {
+  function renderDetailKompetisi(raw = [], isRegist = false) {
     const wrap = document.getElementById("event-competitions");
     if (!wrap) return;
 
@@ -48,6 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
       : [];
 
     wrap.innerHTML = "";
+
+    if (data.length === 0) {
+      wrap.innerHTML = "<p style='text-align:center'>Tidak ada kompetisi.</p>";
+      return;
+    }
 
     data.forEach((item, idx) => {
       // sumber data
@@ -63,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "";
       const loc =
         item.location || currentEvent?.location || currentEvent?.address || "";
+
+      console.log("IsRegist:", isRegist);
 
       const card = document.createElement("article");
       card.className = "simp-card";
@@ -92,13 +96,50 @@ document.addEventListener("DOMContentLoaded", () => {
               : ""
           }
         </div>`;
-        if (window.Swal)
+        if (item.qrStatusCompetition) {
+          const qrImgCompetition = item.qrImageCompetition;
+          Swal.fire({
+            title:
+              "<strong> Anda Sudah Terdaftar • Kode QR Competition</strong>",
+            html: qrImgCompetition ?? "QR Code tidak tersedia.",
+            imageAlt: "QR Code Untuk Event Ini",
+            showCloseButton: true,
+            confirmButtonText: "Tutup",
+          });
+        } else {
           Swal.fire({
             title: "Detail Kompetisi",
             html,
             width: 720,
-            confirmButtonText: "Tutup",
+            confirmButtonText: "Daftar", // ganti tulisan tombol
+            showCancelButton: true, // opsional: bisa tambahin tombol batal
+            cancelButtonText: "Tutup",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // arahkan ke halaman form
+              console.log("Sudah Regist?", isRegist);
+              // Kalau sudah daftar event dia bisa daftar kompetisi
+              if (isRegist) {
+                // Kirim respon json field ke halaman form-competition
+                const transferData = item || {};
+
+                // Kirim data diatas menggunakan sessionStorage
+                sessionStorage.setItem(
+                  "detailEvent",
+                  JSON.stringify(transferData)
+                );
+                // Arahkan ke halaman form-competition
+                window.location.href = "form-competition.html";
+              } else {
+                Swal.fire(
+                  "Perhatian",
+                  "Silakan daftar event terlebih dahulu sebelum mendaftar kompetisi.",
+                  "info"
+                );
+              }
+            }
           });
+        }
       });
 
       wrap.appendChild(card);
@@ -133,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showLoader();
     try {
       const res = await fetchEventDetails(eventId);
+      console.log("Event details:", res);
       if (!res || res.status !== true) {
         window.history.back();
         throw new Error("Event not found or invalid response");
@@ -157,8 +199,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (descEl)
         descEl.textContent = data.detailEvent || data.description || "N/A";
       if (locEl) locEl.textContent = data.location || data.address || "N/A";
-      console.log("Event details:", data);
-      renderDetailKompetisi(data.competitionEvent || []);
+
+      renderDetailKompetisi(data.competitionEvent || [], data.qrStatusEvent);
       // tanggal & waktu aman
       try {
         const srcDate = data.date || data.event_date || data.eventDate || "";

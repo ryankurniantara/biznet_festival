@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Data Diri</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/form-competition.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <div id="header" class="header"></div>
+
+    <div class="main">
+      <main class="page-competition">
+        <div class="form-page">
+          <h1 class="page-title">Form Kompetisi</h1>
+          <div id="competition-form" class="card"></div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer" class="footer"></div>
+    <!-- Loader Overlay -->
+    <div id="loader-overlay" class="loader-overlay" hidden>
+      <div class="loader"></div>
+    </div>
+
+    <!-- jQuery + jQuery Validation (HARUS di atas edit-profile.js) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <!-- App scripts -->
+    <script src="assets/js/auth.js"></script>
+    <script type="module" src="assets/js/form-competition.js"></script>
+    <script src="assets/js/components/header.js"></script>
+    <script src="assets/js/components/footer.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/components/alerts.js"></script>
+  </body>
+</html>

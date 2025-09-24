@@ -23,9 +23,15 @@
       <section class="event-section">
         <!-- Upcoming Events -->
         <div class="event-toolbar">
-          <h2>UPCOMING EVENT</h2>
+          <h2>UPCOMING EVENTS</h2>
           <!-- Filter: kalender di kanan -->
-          <div id="year-filter" class="year-filter"></div>
+          <div class="filters">
+            <!-- Year Filter -->
+            <select id="year-filter" class="chip-button year-filter">
+              <option value="">Semua Tahun</option>
+              <!-- Options will be populated dynamically from API data -->
+            </select>
+          </div>
         </div>
 
         <div id="event-list" class="event-list"></div>
@@ -35,7 +41,7 @@
 
         <!-- Upcoming Events -->
         <div class="event-toolbar">
-          <h2>PAST EVENT</h2>
+          <h2>PAST EVENTS</h2>
         </div>
 
         <div id="past-event-list" class="event-list"></div>
@@ -50,14 +56,17 @@
 
     <!-- Script -->
     <script type="module" src="assets/js/auth.js"></script>
-    <script src="assets/js/components/year-filter.js"></script>
-    <script type="module" src="assets/js/event.js"></script>
+    <script src="assets/js/api/api.js"></script>
     <script src="assets/js/components/header.js"></script>
     <script type="module" src="assets/js/components/footer.js"></script>
-
+    <!-- <script type="module" src="assets/js/main.js"></script> -->
+    <script type="module" src="assets/js/event.js"></script>
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Helper alert -->
     <script src="assets/js/components/alerts.js"></script>
+    <div id="loader-overlay" class="loader-overlay" hidden>
+      <div class="loader"></div>
+    </div>
   </body>
 </html>

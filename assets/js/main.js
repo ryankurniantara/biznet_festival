@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
   (async function init() {
     // PENTING: tampilkan loader saat menunggu auth siap
     await withLoader(eventList, async () => {
-      await waitAuthReady({ timeoutMs: 2000 });
+      await waitAuthReady({ timeoutMs: 1000 });
 
       if (eventsController) eventsController.abort();
       eventsController = new AbortController();

@@ -24,6 +24,7 @@
     "edit-profile.html",
     "event.html",
     "detail-event.html",
+    "form-competition.html",
   ];
 
   // Jika ingin memastikan localStorage SEPENUHNYA kosong,
